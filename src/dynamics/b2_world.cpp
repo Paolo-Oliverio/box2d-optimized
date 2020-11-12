@@ -841,7 +841,8 @@ void b2TOIMinHeap::Build() {
 	}
 }
 
-struct b2TOIQueryWrapper {
+class b2TOIQueryWrapper {
+public:
 	void QueryCallback(b2Fixture* fixture) {
 		b2Contact* c = m_contactManager->QueryCallback(m_currentQueryFixture, fixture);
 	  

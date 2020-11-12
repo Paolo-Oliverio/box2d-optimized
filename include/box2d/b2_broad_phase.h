@@ -26,6 +26,7 @@
 #include "b2_collision.h"
 #include "b2_fixture.h"
 #include "b2_growable_stack.h"
+#include <malloc.h>
 
 /// A node in the BVH tree used in the broad-phase. Used both for internal and leaf nodes
 /// For internal use.
@@ -296,8 +297,11 @@ void b2BroadPhase::UpdateAndQuery(T* callback) {
   m_bufferStack->buffer = (b2TreeNode**) b2Alloc(m_bufferStack->capacity * sizeof(b2TreeNode*));
   currentBufferSize = 0;
   maxBufferSize = 0;
-  
+#ifndef _WINDOWS
 	b2TreeNode* temp[m_count];
+#else
+	b2TreeNode** temp = (b2TreeNode**)_malloca(sizeof(b2TreeNode*) * m_count);
+#endif
   m_treeAllocator = m_nodes + m_capacity + staticGroup;
 	m_rootDynamic = BuildAndQuery(callback, staticGroup, m_count, temp, 0);
 
